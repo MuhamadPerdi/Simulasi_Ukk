@@ -1,4 +1,3 @@
-<!-- filepath: /C:/Users/Perdi/Simulasi_Ukk/resources/views/peminjaman/index.blade.php -->
 @extends('layouts.app')
 
 @section('title', 'Peminjaman')
@@ -9,8 +8,7 @@
         <div class="page-title-box">
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">Pages</a></li>
+                    <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Dashboard</a></li>
                     <li class="breadcrumb-item active">Peminjaman</li>
                 </ol>
             </div>
@@ -43,7 +41,7 @@
                 <table class="table table-bordered table-hover" id="peminjamanTable">
                     <thead class="table-light">
                         <tr>
-                            <th>ID</th>
+                            <th>No</th>
                             <th>ID Inventaris</th>
                             <th>Nama Barang</th>
                             <th>Nama Peminjam</th>

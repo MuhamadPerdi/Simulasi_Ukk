@@ -11,14 +11,14 @@
         <div class="card-body">
             <h3 class="text-center mb-4">Login</h3>
 
-            <!-- Menampilkan pesan sukses -->
+            <!-- Display success message -->
             @if(session('success'))
                 <div class="alert alert-success text-center">
                     {{ session('success') }}
                 </div>
             @endif
 
-            <!-- Menampilkan pesan error -->
+            <!-- Display error message -->
             @if(session('error'))
                 <div class="alert alert-danger text-center">
                     {{ session('error') }}
@@ -28,11 +28,11 @@
             <form action="{{ route('login') }}" method="POST">
                 @csrf
                 <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" name="email" id="email" 
-                           class="form-control @error('email') is-invalid @enderror" 
-                           value="{{ old('email') }}" required autofocus>
-                    @error('email')
+                    <label for="login" class="form-label">Email atau Username</label>
+                    <input type="text" name="login" id="login" 
+                           class="form-control @error('login') is-invalid @enderror" 
+                           value="{{ old('login') }}" required autofocus>
+                    @error('login')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
@@ -50,8 +50,6 @@
                     <button type="submit" class="btn btn-primary">Login</button>
                 </div>
             </form>
-            
-           
         </div>
     </div>
 </body>

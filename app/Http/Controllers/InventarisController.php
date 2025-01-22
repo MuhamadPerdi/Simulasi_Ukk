@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Inventaris;
+use App\Models\Peminjaman;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class InventarisController extends Controller
 {
@@ -57,19 +59,32 @@ class InventarisController extends Controller
 
     public function update(Request $request, Inventaris $inventari)
     {
-        
         $request->validate([
-           'id_inventaris' => 'required|string|unique:inventaris,id_inventaris',
-            'nama_barang' => 'required|string|unique:inventaris,nama_barang',
+            'id_inventaris' => [
+                'required',
+                'string',
+                Rule::unique('inventaris')->ignore($inventari->id),
+            ],
+            'nama_barang' => [
+                'required',
+                'string',
+                Rule::unique('inventaris')->ignore($inventari->id),
+            ],
             'kondisi' => 'required|string|in:Baik,Rusak,Perbaikan',
             'stok' => 'required|integer',
             'tanggal_register' => 'required|date',
         ]);
-
+    
+        // Pastikan tidak ada referensi aktif di tabel peminjaman
+        if (Peminjaman::where('nama_barang', $inventari->nama_barang)->exists()) {
+            return redirect()->route('inventaris.index')
+                ->with('error', 'Tidak dapat memperbarui inventaris karena masih ada referensi aktif di tabel peminjaman.');
+        }
+    
         $inventari->update($request->all());
-
+    
         return redirect()->route('inventaris.index')
-            ->with('success', 'Inventaris updated successfully');
+            ->with('success', 'Data inventaris berhasil diperbarui');
     }
 
     public function destroy(Inventaris $inventaris)

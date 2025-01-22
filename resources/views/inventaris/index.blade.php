@@ -16,8 +16,7 @@
         <div class="page-title-box">
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">Pages</a></li>
+                    <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Dashboard</a></li>
                     <li class="breadcrumb-item active">Inventaris</li>
                 </ol>
             </div>
@@ -39,6 +38,11 @@
                     <input type="text" id="searchInput" class="form-control" placeholder="Cari inventaris (nama barang, kondisi, ID)...">
                 </div>
             </div>
+            @if (session('error'))
+                <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+            @endif
 
             @if (session('success'))
                 <div class="alert alert-success">

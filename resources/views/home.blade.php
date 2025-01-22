@@ -75,6 +75,20 @@
         </div>
     </div>
 
+    <!-- Alert sukses -->
+        @if (session('success'))
+        <div class="alert alert-success text-center">
+        {{ session('success') }}
+        </div>
+        @endif
+
+<!-- Alert error -->
+        @if (session('error'))
+        <div class="alert alert-danger text-center">
+        {{ session('error') }}
+        </div>
+        @endif
+
     <!-- Alert jika data tidak ditemukan -->
     <div id="noResultAlert" class="alert alert-warning text-center" style="display: none;">
         Barang tidak ditemukan.

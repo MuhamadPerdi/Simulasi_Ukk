@@ -26,29 +26,36 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        // Validate the input
+        
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'login' => 'required',
             'password' => 'required|min:6',
         ]);
-
+    
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
         }
-
-        // Attempt to log the user in
-        if (Auth::attempt($request->only('email', 'password'))) {
-            // Authentication passed
+    
+        $credentials = $request->only('password');
+    
+      
+        if (filter_var($request->login, FILTER_VALIDATE_EMAIL)) {
+            $credentials['email'] = $request->login;
+        } else {
+            $credentials['name'] = $request->login; // Assuming the username field is `name`
+        }
+    
+        if (Auth::attempt($credentials)) {
             return redirect()->intended('/dashboard')->with('success', 'Login berhasil!');
         }
-
-        // Authentication failed
+    
         return redirect()->back()
-            ->with('error', 'Email atau password salah.')
+            ->with('error', 'Nama atau email, atau password salah.')
             ->withInput();
     }
+    
 
     /**
      * Handle logout request.

@@ -13,7 +13,7 @@
         .form-container {
             background-color: white;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             padding: 30px;
             margin-top: 50px;
         }
@@ -41,11 +41,12 @@
                         <div class="row">
                             <div class="form-group col-md-4 mb-3">
                                 <label for="id_inventaris" class="form-label">ID Inventaris</label>
-                                <select name="id_inventaris" id="id_inventaris" class="form-select" required>
+                                <select name="id_inventaris" id="id_inventaris" class="form-select @error('id_inventaris') is-invalid @enderror" required>
                                     <option value="">Pilih ID Inventaris:</option>
                                     @foreach($inventaris as $item)
                                         <option value="{{ $item->id }}" 
                                             data-nama="{{ $item->nama_barang }}"
+                                            data-id-inventaris="{{ $item->id_inventaris }}"
                                             {{ old('id_inventaris') == $item->id ? 'selected' : '' }}>
                                             {{ $item->id_inventaris }}
                                         </option>
@@ -58,6 +59,8 @@
                                     <option value="">Pilih Nama Barang:</option>
                                     @foreach($inventaris as $item)
                                         <option value="{{ $item->nama_barang }}"
+                                            data-id="{{ $item->id }}"
+                                            data-id-inventaris="{{ $item->id_inventaris }}"
                                             {{ old('nama_barang') == $item->nama_barang ? 'selected' : '' }}>
                                             {{ $item->nama_barang }}
                                         </option>
@@ -129,14 +132,39 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-    $(document).ready(function() {
-        // Sinkronisasi ID Inventaris dan Nama Barang
-        $('#id_inventaris').on('change', function() {
-            const selectedOption = $(this).find('option:selected');
-            const namaBarang = selectedOption. data('nama');
-            $('#nama_barang').val(namaBarang);
+        $(document).ready(function() {
+            $('#id_inventaris, #nama_barang').on('change', function() {
+                const source = $(this).attr('id');
+                const selectedOption = $(this).find('option:selected');
+                
+                if (selectedOption.val()) {
+                    if (source === 'id_inventaris') {
+                        // When ID Inventaris is selected
+                        $('#nama_barang')
+                            .val(selectedOption.data('nama'))
+                            .prop('disabled', true);
+                    } else {
+                        // When Nama Barang is selected
+                        const idInventaris = selectedOption.data('id-inventaris');
+                        $('#id_inventaris')
+                            .val($(`#id_inventaris option[data-id-inventaris="${idInventaris}"]`).val())
+                            .prop('disabled', true);
+                    }
+                } else {
+                    // Reset fields when no selection
+                    if (source === 'id_inventaris') {
+                        $('#nama_barang').val('').prop('disabled', false);
+                    } else {
+                        $('#id_inventaris').val('').prop('disabled', false);
+                    }
+                }
+            });
+
+            // Enable fields before form submission
+            $('form').on('submit', function() {
+                $('#id_inventaris, #nama_barang').prop('disabled', false);
+            });
         });
-    });
     </script>
 </body>
 </html>

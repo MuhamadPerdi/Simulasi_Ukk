@@ -43,11 +43,20 @@ class PeminjamanController extends Controller
             'status' => 'nullable|string|in:Belum Kembali,Sudah Kembali,Proses,Batal',
             'petugas' => 'required|string|max:255',
         ]);
+        $inventaris = Inventaris::where('nama_barang', $request->nama_barang)->first();
 
+        $jumlah = 1;
+
+        if ($inventaris->stok < $jumlah) {
+            return redirect()->back()->with('error', 'Stok tidak mencukupi untuk peminjaman.');
+        }
+    
+        $inventaris->stok -= $jumlah;
+        $inventaris->save();
         Peminjaman::create($request->all());
 
         return redirect()->route('home')
-            ->with('success', 'Peminjaman created successfully.');
+            ->with('success', 'Peminjaman Berhasil Tunggu Admin Mengkonfirmasi.');
     }
 
     public function updateStatus(Request $request, $id)
